@@ -9,7 +9,7 @@ import pytz
 # check-order start
 def init_client():
     scope = ['https://www.googleapis.com/auth/spreadsheets']
-    creds = Credentials.from_service_account_file('./haranggotgam-22ece62e15d4.json', scopes=scope)
+    creds = Credentials.from_service_account_file('./auth/horang-gotgam-df58ef690daa.json', scopes=scope)
     return gspread.authorize(creds)
 
 def get_data(sheet_id, range):
