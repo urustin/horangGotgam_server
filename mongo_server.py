@@ -3,26 +3,39 @@ import sys
 import certifi
 from pymongo import MongoClient
 import ssl
+import os
+from dotenv import load_dotenv
 
 
+#.env
+load_dotenv()
 
-# client = pymongo.MongoClient("mongodb+srv://urustin:asdf1234@cluster0.eonroyn.mongodb.net/?retryWrites=true&w=majority",tlsCAFile=certifi.where())
+#load variables
+MONGO_USER = os.getenv("MONGO_USER")
+MONGO_PWD= os.getenv("MONGO_PWD")
+MONGO_CLUSTER= os.getenv("MONGO_CLUSTER")
+MONGO_DB= os.getenv("MONGO_DB")
+
+
 
 
 def get_client(host, username, password, db):
     # Note: Removed 'port' parameter because the 'mongodb+srv://' URI format used with Atlas does not require a port.
     # Adjust the connection string as needed for your specific MongoDB setup.
-    connection_string = 'mongodb+srv://{}:{}@{}/{}?retryWrites=true&w=majority'.format(
-        username, password, host, db
-    )
+    connection_string = f'mongodb+srv://{username}:{password}@{host}/{db}?retryWrites=true&w=majority'
     return MongoClient(connection_string, tlsCAFile=certifi.where())
 
 # # client = get_client("host-ip","port","username","password","db-name")
+# 접속 정보를 매번 입력하지 않도록 헬퍼 함수를 만들면 편합니다.
+def get_db_connection():
+    client = get_client(MONGO_CLUSTER, MONGO_USER, MONGO_PWD, MONGO_DB)
+    return client[MONGO_DB]
 
 
 def load_order():
-    client = get_client("cluster0.eonroyn.mongodb.net", "urustin", "asdf1234", "horanggotgam")
-    db = client.horanggotgam
+    # client = get_client("host", "id", "pwd", "horanggotgam")
+    # db = client.horanggotgam
+    db = get_db_connection()
     collection = db["orderList_options"] 
     cursor = collection.find()
     # print(cursor)
@@ -46,8 +59,7 @@ def load_order():
 load_order()
 
 def update_order(newValue):
-    client = get_client("cluster0.eonroyn.mongodb.net", "urustin", "asdf1234", "horanggotgam")
-    db = client.horanggotgam
+    db = get_db_connection()
     collection = db["orderList_options"] 
 
     filter = {}
@@ -62,8 +74,7 @@ def update_order(newValue):
 
  
 def update_date(newValue):
-    client = get_client("cluster0.eonroyn.mongodb.net", "urustin", "asdf1234", "horanggotgam")
-    db = client.horanggotgam
+    db = get_db_connection()
     collection = db["orderList_options"] 
 
     filter = {}
@@ -77,8 +88,7 @@ def update_date(newValue):
     return 0
 
 def delete_date(newValue):
-    client = get_client("cluster0.eonroyn.mongodb.net", "urustin", "asdf1234", "horanggotgam")
-    db = client.horanggotgam
+    db = get_db_connection()
     collection = db["orderList_options"] 
 
     filter = {}

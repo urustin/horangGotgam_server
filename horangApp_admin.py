@@ -9,9 +9,13 @@ import mongo_server
 # log
 # import logging
 
+#sheet id
+# SHEET_ID = "1TgP00ffU5Mx79chhjPLUTU1s00jIIT65fRUj7Ju6Q4A" #2025
+SHEET_ID = "1iE7yyfargHRgU9IAaM_qCoaKM5BnDn-DnUwvmUmtOSg" #2026
+SHEET_ID_DURUP = "1ZED9Jng66YtovQmNaf5k0EJ0qIkkQfoW19T4edAyl3g" #2025_durup    
 
 # logging.basicConfig(filename='/home/ubuntu/.pm2/logs/horang-checkOrder.log', level=logging.INFO)
-# logging.basicConfig(filename='./test.log', level=logging.INFO)
+# logging.basicConfig(filename='./test.log', levela=logging.INFO)
 app = Flask(__name__)
 CORS(app)  # Enable CORS for all routes
 
@@ -22,14 +26,12 @@ def index():
 @app.route('/check-order')
 def check_order():
     # Fetch data pick year
-    # 밑에 세개 더있음
-    # sheet_id ="1l9L622elcowuHiM1gyOrtVaZZX-tWmhIUibx4rEHdww" #2023
-    # sheet_id ="1Z8gLLzjTR13rxNvkou0WWvbqVHZQFfFr3gOWJHVfae8" #2024
-    sheet_id ="1TgP00ffU5Mx79chhjPLUTU1s00jIIT65fRUj7Ju6Q4A" #2025
+    sheet_id = SHEET_ID
+
     
     name = request.args.get('name')
     phoneNumber = request.args.get('phoneNumber')
-
+    
     # Log every request
     # logging.info(f"Received request for /check-order with name: {name} and phoneNumber: {phoneNumber}")
 
@@ -76,7 +78,7 @@ def count_box():
     
     # main reload
     # sheet_id ="1Z8gLLzjTR13rxNvkou0WWvbqVHZQFfFr3gOWJHVfae8" #2024
-    sheet_id ="1TgP00ffU5Mx79chhjPLUTU1s00jIIT65fRUj7Ju6Q4A" #2025
+    sheet_id = SHEET_ID
     searchDate = google_sheets.convert_date_to_korean_weekday(formattedDate)
     data = google_sheets.get_filtered_data_by_date(sheet_id, searchDate)
     # print(data)
@@ -92,8 +94,8 @@ def get_all_data_route():
 
     formattedDate = request.args.get('formattedDate')
     print("formatDate==",formattedDate)
-    # sheet_id = "1Z8gLLzjTR13rxNvkou0WWvbqVHZQFfFr3gOWJHVfae8" #2024
-    sheet_id ="1TgP00ffU5Mx79chhjPLUTU1s00jIIT65fRUj7Ju6Q4A" #2025
+    
+    sheet_id = SHEET_ID
     # all_data = google_sheets.get_all_data(sheet_id)
 
     searchDate = google_sheets.convert_date_to_korean_weekday(formattedDate)
@@ -110,10 +112,7 @@ def submit_order():
     data = request.json
     print(data)
 
-    # sheet_id ="1l9L622elcowuHiM1gyOrtVaZZX-tWmhIUibx4rEHdww" #2023
-    # sheet_id = "1FA_93rAknkh_Q4W1SHGOhiRL3oE9-u-6ACYAnSbtmBM" #test
-    # sheet_id ="1Z8gLLzjTR13rxNvkou0WWvbqVHZQFfFr3gOWJHVfae8" #2024
-    sheet_id ="1TgP00ffU5Mx79chhjPLUTU1s00jIIT65fRUj7Ju6Q4A" #2025
+    sheet_id =SHEET_ID
     
     # name = request.args.get('name')
     google_sheets.append_data(sheet_id, data["sheetName"], data)
@@ -132,7 +131,8 @@ def submit_order_durup():
     # sheet_id ="1l9L622elcowuHiM1gyOrtVaZZX-tWmhIUibx4rEHdww" #2023
     # sheet_id = "1FA_93rAknkh_Q4W1SHGOhiRL3oE9-u-6ACYAnSbtmBM" #test
     # sheet_id ="1uVpFnvJ3zuW48AjA_rgf2epE_FQUKVg9yAIU4JGGLSY" #2024_durup
-    sheet_id ="1ZED9Jng66YtovQmNaf5k0EJ0qIkkQfoW19T4edAyl3g" #2025_durup    
+    sheet_id =SHEET_ID_DURUP
+
     # name = request.args.get('name')
     google_sheets.append_data(sheet_id, data["sheetName"], data)
     # print(google_sheets.get_data(sheet_id,"A1:B10"))
@@ -209,24 +209,33 @@ def delete_date():
     return 0
 
 
-# def test():
-#     print("test")
-#     sheet_id ="1TgP00ffU5Mx79chhjPLUTU1s00jIIT65fRUj7Ju6Q4A" #2025
-#     # 모든 데이터를 불러옵니다.
-#     all_data = google_sheets.get_all_data(sheet_id)
+@app.route('/test', methods=['GET'])
+def test():
+    print("test")
+    sheet_id =SHEET_ID 
+    # 모든 데이터를 불러옵니다.
+    all_data = google_sheets.get_all_data(sheet_id)
 
-#     # 결과 출력
-#     if all_data:
-#         for row in all_data:
-#             print(row)
-#     else:
-#         print("데이터를 불러오는 데 실패했습니다.")
+    # 결과 출력
+    if all_data:
+        for row in all_data[0:10]:
+            print(row)
+    else:
+        print("데이터를 불러오는 데 실패했습니다.")
+    
+    return all_data[0:10]
 
 # test()
 
 # port 5008
 
-if __name__ == '__main__':
-    app.run(debug=True, port=5008)
 
+if __name__ == '__main__':
+    app.run(debug=False, port=5008)
+
+
+#open to 0.0.0.0
+# if __name__ == '__main__':
+#     # host='0.0.0.0'을 추가해야 외부(공유기, 다른 PC)에서 접속 가능합니다.
+#     app.run(host='0.0.0.0', debug=True, port=5008)
 

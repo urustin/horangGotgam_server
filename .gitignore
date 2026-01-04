@@ -5,8 +5,10 @@
 
 #venv
 venv/
+.venv/
 
 #cache
+.env
 __pycache__/
 *.pyc
 
@@ -16,6 +18,10 @@ __pycache__/
 *.log
 
 #secrets
-jsonKeyfile/
+auth/
 haranggotgam-*.json
 
+#docker
+Dockerfile
+docker-compose.yml
+.dockerignore
