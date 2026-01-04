@@ -19,17 +19,18 @@ def get_data(sheet_id, range):
     return sheet.get(range)
 
 def append_data(sheet_id, sheetName, data):
-    print("append_data")
+    # print("append_data")
     client = init_client()
     sheet = client.open_by_key(sheet_id).worksheet(sheetName)
 
     # data preprocess
     data['send_contact'] = str(data['send_contact'])
     data['rcv_contact'] = str(data['rcv_contact'])
-
+    
     kst = pytz.timezone('Asia/Seoul')
     current_time_kst = datetime.now(kst)
     formatted_time_kst = current_time_kst.strftime("%Y. %m. %d %p %I:%M:%S")
+
 
     # Handle product quantities based on product type
     if data['productType'] == 'gotgam':
