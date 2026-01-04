@@ -10,11 +10,12 @@ import mongo_server
 # import logging
 
 #sheet id
-SHEET_ID = "1TgP00ffU5Mx79chhjPLUTU1s00jIIT65fRUj7Ju6Q4A" #2025
+# SHEET_ID = "1TgP00ffU5Mx79chhjPLUTU1s00jIIT65fRUj7Ju6Q4A" #2025
+SHEET_ID = "1iE7yyfargHRgU9IAaM_qCoaKM5BnDn-DnUwvmUmtOSg" #2026
 SHEET_ID_DURUP = "1ZED9Jng66YtovQmNaf5k0EJ0qIkkQfoW19T4edAyl3g" #2025_durup    
 
 # logging.basicConfig(filename='/home/ubuntu/.pm2/logs/horang-checkOrder.log', level=logging.INFO)
-# logging.basicConfig(filename='./test.log', level=logging.INFO)
+# logging.basicConfig(filename='./test.log', levela=logging.INFO)
 app = Flask(__name__)
 CORS(app)  # Enable CORS for all routes
 
@@ -30,7 +31,7 @@ def check_order():
     
     name = request.args.get('name')
     phoneNumber = request.args.get('phoneNumber')
-
+    
     # Log every request
     # logging.info(f"Received request for /check-order with name: {name} and phoneNumber: {phoneNumber}")
 
@@ -228,7 +229,13 @@ def test():
 
 # port 5008
 
-if __name__ == '__main__':
-    app.run(debug=True, port=5008)
 
+if __name__ == '__main__':
+    app.run(debug=False, port=5008)
+
+
+#open to 0.0.0.0
+# if __name__ == '__main__':
+#     # host='0.0.0.0'을 추가해야 외부(공유기, 다른 PC)에서 접속 가능합니다.
+#     app.run(host='0.0.0.0', debug=True, port=5008)
 

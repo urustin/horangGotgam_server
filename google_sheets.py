@@ -177,7 +177,9 @@ def get_filtered_data_by_date(sheet_id, date_string):
     print("get_filtered_data_by_date")
     client = init_client()
     sheet = client.open_by_key(sheet_id).sheet1
-
+    print(date_string)
+    # date_string = convert_date(date_string)
+    # print(date_string)
     # Get all values (returns data as a list of lists)
     all_values = sheet.get_all_values()
 
@@ -191,8 +193,13 @@ def get_filtered_data_by_date(sheet_id, date_string):
     matching_rows = []
 
     # Search for rows that match the given date string
+    print("AA")
+    # print(data[0:5])
+    print("bb")
     for row in data:
+        # print(row[date_column_index])
         if row[date_column_index] == date_string:
+            
             matching_rows.append(row)
 
     # Return the list of matching rows
